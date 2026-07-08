@@ -41,9 +41,8 @@ export function Layout({ children }: { children: React.ReactNode }) {
   );
 }
 
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-
-const queryClient = new QueryClient();
+import { QueryClientProvider } from "@tanstack/react-query";
+import { queryClient } from "../lib/query-client";
 
 export default function App() {
   return (
