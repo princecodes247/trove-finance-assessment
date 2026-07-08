@@ -1,4 +1,4 @@
-import { Eye, TrendingUp, Loader2 } from "lucide-react";
+import { Eye, TrendingUp } from "lucide-react";
 import { AreaChart, Area, ResponsiveContainer, XAxis, Tooltip } from "recharts";
 import { useQuery } from "@tanstack/react-query";
 import { apiClient } from "../../../lib/api-client";
@@ -30,7 +30,7 @@ export function NetWorthChart() {
           </div>
           <div className="flex items-center space-x-3">
             {isLoading ? (
-              <Loader2 className="w-6 h-6 animate-spin text-text-neutral" />
+              <div className="h-8 w-32 bg-border rounded animate-pulse" />
             ) : (
               <span className="text-[28px] font-semibold text-text-default">
                 ${summary?.totalPortfolioValue.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}

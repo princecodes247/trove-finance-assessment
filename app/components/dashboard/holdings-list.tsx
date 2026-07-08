@@ -1,4 +1,4 @@
-import { LayoutGrid, Building2, Stethoscope, Landmark, ShoppingCart, Film, Loader2 } from "lucide-react";
+import { LayoutGrid, Building2, Stethoscope, Landmark, ShoppingCart, Film } from "lucide-react";
 import { useQuery } from "@tanstack/react-query";
 import { apiClient } from "../../../lib/api-client";
 
@@ -30,9 +30,25 @@ export function HoldingsList() {
       
       <div className="flex flex-col space-y-3">
         {isLoading && (
-          <div className="flex justify-center p-8">
-            <Loader2 className="w-6 h-6 animate-spin text-text-neutral" />
-          </div>
+          <>
+            {[1, 2, 3].map((i) => (
+              <div key={i} className="bg-surface border border-border rounded-xl p-4 flex items-center shadow-sm animate-pulse">
+                <div className="w-10 h-10 rounded-lg bg-border mr-4 shrink-0" />
+                <div className="flex-1 space-y-2">
+                  <div className="h-4 w-16 bg-border rounded" />
+                  <div className="h-3 w-24 bg-border rounded" />
+                </div>
+                <div className="flex-1 hidden sm:block space-y-2">
+                  <div className="h-3 w-12 bg-border rounded mx-auto" />
+                  <div className="h-4 w-10 bg-border rounded mx-auto" />
+                </div>
+                <div className="text-right space-y-2 shrink-0 flex flex-col items-end">
+                  <div className="h-4 w-16 bg-border rounded" />
+                  <div className="h-3 w-20 bg-border rounded" />
+                </div>
+              </div>
+            ))}
+          </>
         )}
         {data?.slice(0, 5).map((holding) => {
           const totalValue = holding.shares * holding.currentPrice;

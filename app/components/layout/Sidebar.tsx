@@ -1,8 +1,8 @@
 import { Link, useLocation } from "react-router";
-import { LayoutGrid, Wallet, ReceiptText, TrendingUp, Settings, Loader2 } from "lucide-react";
+import { LayoutGrid, Wallet, ReceiptText, TrendingUp, Settings } from "lucide-react";
 import { useQuery } from "@tanstack/react-query";
 import { apiClient } from "../../../lib/api-client";
-import { Button } from "../ui/Button";
+import { Button } from "../ui/button";
 
 export function Sidebar() {
   const location = useLocation();
@@ -55,9 +55,12 @@ export function Sidebar() {
             alt="Adaeze Okonkwo"
             className="w-10 h-10 rounded-full object-cover mr-3 border border-border"
           />
-          <div className="flex flex-col">
+          <div className="flex flex-col space-y-2">
             {isLoading ? (
-              <Loader2 className="w-4 h-4 animate-spin text-text-neutral" />
+              <>
+                <div className="h-3 w-24 bg-border rounded animate-pulse" />
+                <div className="h-2 w-20 bg-border rounded animate-pulse" />
+              </>
             ) : (
               <>
                 <span className="text-[13px] font-bold text-text-default leading-tight">{user?.name}</span>

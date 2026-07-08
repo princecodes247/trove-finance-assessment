@@ -1,4 +1,4 @@
-import { Plus, Minus, Loader2 } from "lucide-react";
+import { Plus, Minus } from "lucide-react";
 import { useQuery } from "@tanstack/react-query";
 import { apiClient } from "../../../lib/api-client";
 
@@ -37,9 +37,21 @@ export function TransactionsList() {
 
       <div className="bg-surface border border-border rounded-xl shadow-sm flex flex-col">
         {isLoading && (
-          <div className="flex justify-center p-8">
-            <Loader2 className="w-6 h-6 animate-spin text-text-neutral" />
-          </div>
+          <>
+            {[1, 2, 3].map((i, index) => (
+              <div key={i} className={`p-4 flex items-center ${index !== 0 ? 'border-t border-border' : ''} animate-pulse`}>
+                <div className="w-10 h-10 rounded-full bg-border mr-4 shrink-0" />
+                <div className="flex-1 space-y-2">
+                  <div className="h-4 w-32 bg-border rounded" />
+                  <div className="h-3 w-40 bg-border rounded" />
+                </div>
+                <div className="text-right space-y-2 flex flex-col items-end shrink-0">
+                  <div className="h-4 w-20 bg-border rounded" />
+                  <div className="h-3 w-16 bg-border rounded-full" />
+                </div>
+              </div>
+            ))}
+          </>
         )}
         {data?.slice(0, 5).map((tx, index) => {
           const isBuy = tx.type === "BUY";
