@@ -1,9 +1,16 @@
 import { Link, useLocation } from "react-router";
-import { LayoutGrid, Wallet, ReceiptText, TrendingUp, Settings } from "lucide-react";
+import { LayoutGrid, Wallet, ReceiptText, TrendingUp, Settings, Loader2 } from "lucide-react";
+import { useQuery } from "@tanstack/react-query";
+import { apiClient } from "../../../lib/api-client";
 import { Button } from "../ui/Button";
 
 export function Sidebar() {
   const location = useLocation();
+  
+  const { data: user, isLoading } = useQuery({
+    queryKey: ['user'],
+    queryFn: apiClient.getUser
+  });
 
   const navItems = [
     { name: "Dashboard", path: "/dashboard", icon: LayoutGrid },
@@ -49,8 +56,14 @@ export function Sidebar() {
             className="w-10 h-10 rounded-full object-cover mr-3 border border-border"
           />
           <div className="flex flex-col">
-            <span className="text-[13px] font-bold text-text-default leading-tight">Adaeze Okonkwo</span>
-            <span className="text-[11px] text-text-disabled font-medium mt-0.5">Premium Member</span>
+            {isLoading ? (
+              <Loader2 className="w-4 h-4 animate-spin text-text-neutral" />
+            ) : (
+              <>
+                <span className="text-[13px] font-bold text-text-default leading-tight">{user?.name}</span>
+                <span className="text-[11px] text-text-disabled font-medium mt-0.5">Premium Member</span>
+              </>
+            )}
           </div>
         </div>
         <Button className="w-full">
