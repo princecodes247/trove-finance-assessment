@@ -47,8 +47,8 @@ export function HoldingsList() {
 
   return (
     <div className="flex flex-col h-full">
-      <div className="flex justify-between items-end mb-4">
-        <h3 className="text-[16px] font-bold text-text-default">Holdings</h3>
+      <div className="flex justify-end lg:justify-between items-end mb-4">
+        <h3 className="hidden lg:block text-[16px] font-bold text-text-default">Holdings</h3>
         <button className="text-[12px] font-bold text-primary hover:text-primary/80 transition-colors">
           View All
         </button>

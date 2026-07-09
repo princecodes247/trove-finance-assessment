@@ -22,7 +22,7 @@ export function Sidebar() {
   ];
 
   return (
-    <aside className="w-[260px] h-screen sticky top-0 overflow-y-auto bg-canvas border-r border-border flex flex-col hidden sm:flex">
+    <aside className="w-[260px] h-screen sticky top-0 overflow-y-auto bg-canvas border-r border-border hidden lg:flex flex-col">
       <div className="p-8 pb-10">
         <h1 className="text-xl font-extrabold text-primary">Trove</h1>
       </div>

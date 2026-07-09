@@ -42,7 +42,7 @@ export function AssetAllocation() {
 
   if (isError) {
     return (
-      <div className="bg-surface border border-border rounded-xl p-8 shadow-sm flex items-center justify-center h-full min-h-[300px]">
+      <div className="bg-surface border border-border rounded-xl p-5 sm:p-8 shadow-sm flex items-center justify-center h-full min-h-[300px]">
         <div className="text-center">
           <p className="text-negative font-semibold mb-2">Failed to load allocation</p>
           <p className="text-text-neutral text-[13px] mb-4">Please check your network and try again.</p>
@@ -52,7 +52,7 @@ export function AssetAllocation() {
   }
 
   return (
-    <div className="bg-surface border border-border rounded-xl p-8 shadow-sm flex flex-col h-full">
+    <div className="bg-surface border border-border rounded-xl p-5 sm:p-8 shadow-sm flex flex-col h-full">
       <h3 className="text-[15px] font-bold text-text-default mb-8">Asset Allocation</h3>
       
       {isLoading ? (

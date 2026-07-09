@@ -33,7 +33,7 @@ export function NetWorthChart() {
 
   if (isErrorSummary || isErrorHistory) {
     return (
-      <div className="bg-surface border border-border rounded-xl p-8 lg:col-span-2 shadow-sm flex items-center justify-center h-full min-h-[300px]">
+      <div className="bg-surface border border-border rounded-xl p-5 sm:p-8 xl:col-span-2 shadow-sm flex items-center justify-center h-full min-h-[300px]">
         <div className="text-center">
           <p className="text-negative font-semibold mb-2">Failed to load net worth data</p>
           <p className="text-text-neutral text-[13px]">Please check your connection and try again.</p>
@@ -43,8 +43,8 @@ export function NetWorthChart() {
   }
 
   return (
-    <div className="bg-surface border border-border rounded-xl p-8 lg:col-span-2 shadow-sm flex flex-col h-full">
-      <div className="flex justify-between items-start mb-6">
+    <div className="bg-surface border border-border rounded-xl p-5 sm:p-8 xl:col-span-2 shadow-sm flex flex-col h-full">
+      <div className="flex flex-col md:flex-row gap-2 justify-between items-start mb-6">
         <div>
           <div className="flex items-center space-x-2 text-text-neutral mb-2">
             <span className="text-[14px] font-medium">Total Net Worth</span>

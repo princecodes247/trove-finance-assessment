@@ -43,22 +43,22 @@ export function PortfolioCards() {
 
   if (isLoading) {
     return (
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
-        {[1, 2, 3, 4].map((i) => (
-          <div key={i} className="bg-surface border border-border rounded-xl p-6 shadow-sm h-[126px] animate-pulse">
-            <div className="h-4 w-24 bg-border rounded mb-3" />
-            <div className="h-6 w-32 bg-border rounded mb-2" />
-            <div className="h-4 w-16 bg-border rounded" />
-          </div>
-        ))}
-      </div>
+      <div className="flex overflow-x-auto snap-x snap-mandatory lg:grid lg:grid-cols-4 gap-4 lg:gap-5 pb-4 -mx-4 px-4 lg:mx-0 lg:px-0 lg:pb-0 [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]">
+      {[1, 2, 3, 4].map((i) => (
+        <div key={i} className="min-w-[260px] snap-center lg:min-w-0 lg:snap-none bg-surface border border-border rounded-xl p-6 shadow-sm h-[126px] animate-pulse">
+          <div className="h-4 w-24 bg-border rounded mb-3" />
+          <div className="h-6 w-32 bg-border rounded mb-2" />
+          <div className="h-4 w-16 bg-border rounded" />
+        </div>
+      ))}
+    </div>
     );
   }
 
   return (
-    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
+    <div className="flex overflow-x-auto snap-x snap-mandatory lg:grid lg:grid-cols-4 gap-4 lg:gap-5 pb-4 -mx-4 px-4 lg:mx-0 lg:px-0 lg:pb-0 [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]">
       {cards.map((card) => (
-        <div key={card.title} className="bg-surface border border-border rounded-xl p-6 shadow-sm h-[126px]">
+        <div key={card.title} className="min-w-[260px] snap-center lg:min-w-0 lg:snap-none bg-surface border border-border rounded-xl p-6 shadow-sm h-[126px]">
           <div className="text-[12px] font-medium text-text-neutral mb-2">{card.title}</div>
           <div className="text-[18px] font-bold text-text-default mb-2">
             ${card.value.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
