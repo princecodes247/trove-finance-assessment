@@ -15,10 +15,10 @@ export function Sidebar() {
 
   const navItems = [
     { name: "Dashboard", path: "/dashboard", icon: LayoutGrid },
-    { name: "Portfolio", path: "/portfolio", icon: Wallet },
-    { name: "Transactions", path: "/transactions", icon: ReceiptText },
-    { name: "Markets", path: "/markets", icon: TrendingUp },
-    { name: "Settings", path: "/settings", icon: Settings },
+    { name: "Portfolio", path: "/dashboard/portfolio", icon: Wallet },
+    { name: "Transactions", path: "/dashboard/transactions", icon: ReceiptText },
+    { name: "Markets", path: "/dashboard/markets", icon: TrendingUp },
+    { name: "Settings", path: "/dashboard/settings", icon: Settings },
   ];
 
   return (
