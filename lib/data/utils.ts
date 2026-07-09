@@ -1,3 +1,20 @@
+const MONTHS = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+
+export function formatDeterministicDate(date: Date): string {
+  // Use UTC values to prevent local time formatting hydration mismatches
+  const day = date.getUTCDate();
+  const month = MONTHS[date.getUTCMonth()];
+  return `${month} ${day}`;
+}
+
+export function formatDeterministicFullDate(dateString: string): string {
+  const date = new Date(dateString);
+  const day = date.getUTCDate();
+  const month = MONTHS[date.getUTCMonth()];
+  const year = date.getUTCFullYear();
+  return `${month} ${day}, ${year}`;
+}
+
 export interface GenerateCurveParams {
   startValue: number;
   endValue: number;
@@ -27,7 +44,7 @@ export function generateProceduralCurve({
   for (let i = days; i >= 0; i--) {
     const date = new Date(targetDate);
     date.setDate(date.getDate() - i);
-    const timeStr = date.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+    const timeStr = formatDeterministicDate(date);
 
     if (i === days) {
       // Oldest day = start value

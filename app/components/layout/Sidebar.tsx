@@ -3,12 +3,13 @@ import { LayoutGrid, Wallet, ReceiptText, TrendingUp, Settings } from "lucide-re
 import { useQuery } from "@tanstack/react-query";
 import { apiClient } from "../../../lib/api-client";
 import { Button } from "../ui/button";
+import { dashboardKeys } from "../../../lib/query-keys";
 
 export function Sidebar() {
   const location = useLocation();
   
   const { data: user, isLoading } = useQuery({
-    queryKey: ['user'],
+    queryKey: dashboardKeys.user(),
     queryFn: apiClient.getUser
   });
 
@@ -21,7 +22,7 @@ export function Sidebar() {
   ];
 
   return (
-    <aside className="w-[260px] bg-canvas border-r border-border flex flex-col hidden sm:flex">
+    <aside className="w-[260px] h-screen sticky top-0 overflow-y-auto bg-canvas border-r border-border flex flex-col hidden sm:flex">
       <div className="p-8 pb-10">
         <h1 className="text-xl font-extrabold text-primary">Trove</h1>
       </div>

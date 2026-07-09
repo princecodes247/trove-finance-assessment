@@ -1,26 +1,12 @@
 import React from "react";
 import { useQuery } from "@tanstack/react-query";
 import { apiClient } from "../../../lib/api-client";
-
-const sectorColors: Record<string, string> = {
-  Technology: "bg-primary",
-  Automotive: "bg-accent-blue",
-  Healthcare: "bg-primary-light",
-  Finance: "bg-purple",
-  Entertainment: "bg-cream",
-};
-
-const sectorOrder = [
-  "Technology",
-  "Automotive",
-  "Healthcare",
-  "Finance",
-  "Entertainment"
-];
+import { SECTOR_METADATA, sectorOrder, type Sector } from "../../../lib/constants/sectors";
+import { dashboardKeys } from "../../../lib/query-keys";
 
 export function AssetAllocation() {
-  const { data: holdings, isLoading } = useQuery({
-    queryKey: ['holdings'],
+  const { data: holdings, isLoading, isError } = useQuery({
+    queryKey: dashboardKeys.holdings(),
     queryFn: apiClient.getHoldings
   });
 
@@ -39,17 +25,31 @@ export function AssetAllocation() {
     });
 
     return Object.entries(sectorValues)
-      .map(([name, value]) => ({
-        name,
-        percentage: (value / totalValue) * 100,
-        color: sectorColors[name] || "bg-gray-400"
-      }))
+      .map(([name, value]) => {
+        const metadata = SECTOR_METADATA[name as Sector] || SECTOR_METADATA.Default;
+        return {
+          name,
+          percentage: (value / totalValue) * 100,
+          color: metadata.color
+        };
+      })
       .sort((a, b) => {
-        const indexA = sectorOrder.indexOf(a.name);
-        const indexB = sectorOrder.indexOf(b.name);
+        const indexA = sectorOrder.indexOf(a.name as Sector);
+        const indexB = sectorOrder.indexOf(b.name as Sector);
         return (indexA !== -1 ? indexA : Infinity) - (indexB !== -1 ? indexB : Infinity);
       });
   }, [holdings]);
+
+  if (isError) {
+    return (
+      <div className="bg-surface border border-border rounded-xl p-8 shadow-sm flex items-center justify-center h-full min-h-[300px]">
+        <div className="text-center">
+          <p className="text-negative font-semibold mb-2">Failed to load allocation</p>
+          <p className="text-text-neutral text-[13px] mb-4">Please check your network and try again.</p>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="bg-surface border border-border rounded-xl p-8 shadow-sm flex flex-col h-full">

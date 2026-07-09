@@ -1,10 +1,11 @@
 import React from "react";
 import { useQuery } from "@tanstack/react-query";
 import { apiClient } from "../../../lib/api-client";
+import { dashboardKeys } from "../../../lib/query-keys";
 
 export function PortfolioCards() {
-  const { data: holdings, isLoading } = useQuery({
-    queryKey: ['holdings'],
+  const { data: holdings, isLoading, isError } = useQuery({
+    queryKey: dashboardKeys.holdings(),
     queryFn: apiClient.getHoldings
   });
 
@@ -32,11 +33,19 @@ export function PortfolioCards() {
       .sort((a, b) => b.value - a.value);
   }, [holdings]);
 
+  if (isError) {
+    return (
+      <div className="bg-surface border border-border rounded-xl p-6 shadow-sm flex items-center justify-center min-h-[104px]">
+        <p className="text-negative font-medium text-[13px]">Failed to load categories</p>
+      </div>
+    );
+  }
+
   if (isLoading) {
     return (
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
         {[1, 2, 3, 4].map((i) => (
-          <div key={i} className="bg-surface border border-border rounded-xl p-6 shadow-sm h-[104px] animate-pulse">
+          <div key={i} className="bg-surface border border-border rounded-xl p-6 shadow-sm h-[126px] animate-pulse">
             <div className="h-4 w-24 bg-border rounded mb-3" />
             <div className="h-6 w-32 bg-border rounded mb-2" />
             <div className="h-4 w-16 bg-border rounded" />
@@ -49,7 +58,7 @@ export function PortfolioCards() {
   return (
     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
       {cards.map((card) => (
-        <div key={card.title} className="bg-surface border border-border rounded-xl p-6 shadow-sm">
+        <div key={card.title} className="bg-surface border border-border rounded-xl p-6 shadow-sm h-[126px]">
           <div className="text-[12px] font-medium text-text-neutral mb-2">{card.title}</div>
           <div className="text-[18px] font-bold text-text-default mb-2">
             ${card.value.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}

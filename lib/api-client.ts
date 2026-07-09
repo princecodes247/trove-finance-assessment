@@ -1,45 +1,33 @@
 import portfolioData from "./data/portfolio_data.json";
 import { generateProceduralCurve } from "./data/utils";
+import type { IUser, IPortfolioSummary, IHolding, ITransaction, IHistoricalDataPoint } from "./types";
 
 // Simulate network delay
 const delay = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
 
-export type PortfolioData = typeof portfolioData;
-export type TTransaction = {
-  id: string;
-  type: "BUY" | "SELL";
-  ticker: string;
-  name: string;
-  shares: number;
-  pricePerShare: number;
-  totalAmount: number;
-  date: string;
-  status: "COMPLETED" | "PENDING" | "FAILED";
-};
-
 export const apiClient = {
-  getPortfolioData: async (): Promise<PortfolioData> => {
+  getPortfolioData: async () => {
     await delay(800);
     return portfolioData;
   },
 
-  getUser: async () => {
+  getUser: async (): Promise<IUser> => {
     await delay(500);
     return portfolioData.user;
   },
-  getSummary: async () => {
+  getSummary: async (): Promise<IPortfolioSummary> => {
     await delay(500);
     return portfolioData.summary;
   },
-  getHoldings: async () => {
+  getHoldings: async (): Promise<IHolding[]> => {
     await delay(500);
     return portfolioData.holdings;
   },
-  getTransactions: async () => {
+  getTransactions: async (): Promise<ITransaction[]> => {
     await delay(900);
-    return portfolioData.transactions as TTransaction[];
+    return portfolioData.transactions as ITransaction[];
   },
-  getPortfolioHistory: async (days = 90, volatilityRange: [number, number] = [-0.015, 0.015]) => {
+  getPortfolioHistory: async (days = 90, volatilityRange: [number, number] = [-0.015, 0.015]): Promise<IHistoricalDataPoint[]> => {
     await delay(600);
     return generateProceduralCurve({
       startValue: portfolioData.summary.totalInvested,

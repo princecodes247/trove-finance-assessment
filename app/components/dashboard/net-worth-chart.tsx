@@ -3,8 +3,9 @@ import { Eye, TrendingUp } from "lucide-react";
 import { AreaChart, Area, ResponsiveContainer, XAxis, Tooltip } from "recharts";
 import { useQuery } from "@tanstack/react-query";
 import { apiClient } from "../../../lib/api-client";
+import { dashboardKeys } from "../../../lib/query-keys";
+import type { TimeSpan } from "../../../lib/types";
 
-type TimeSpan = "1D" | "1W" | "1M" | "ALL";
 const spanToDays: Record<TimeSpan, number> = {
   "1D": 1,
   "1W": 7,
@@ -14,13 +15,14 @@ const spanToDays: Record<TimeSpan, number> = {
 
 export function NetWorthChart() {
   const [selectedSpan, setSelectedSpan] = useState<TimeSpan>("1D");
-  const { data: summary, isLoading: isLoadingSummary } = useQuery({
-    queryKey: ['summary'],
+  
+  const { data: summary, isLoading: isLoadingSummary, isError: isErrorSummary } = useQuery({
+    queryKey: dashboardKeys.summary(),
     queryFn: apiClient.getSummary
   });
 
-  const { data: history, isLoading: isLoadingHistory } = useQuery({
-    queryKey: ['portfolioHistory', selectedSpan],
+  const { data: history, isLoading: isLoadingHistory, isError: isErrorHistory } = useQuery({
+    queryKey: dashboardKeys.portfolioHistory(selectedSpan),
     queryFn: () => apiClient.getPortfolioHistory(spanToDays[selectedSpan])
   });
 
@@ -28,6 +30,17 @@ export function NetWorthChart() {
   const isPositive = percentageChange >= 0;
   
   const isLoading = isLoadingSummary || isLoadingHistory;
+
+  if (isErrorSummary || isErrorHistory) {
+    return (
+      <div className="bg-surface border border-border rounded-xl p-8 lg:col-span-2 shadow-sm flex items-center justify-center h-full min-h-[300px]">
+        <div className="text-center">
+          <p className="text-negative font-semibold mb-2">Failed to load net worth data</p>
+          <p className="text-text-neutral text-[13px]">Please check your connection and try again.</p>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="bg-surface border border-border rounded-xl p-8 lg:col-span-2 shadow-sm flex flex-col h-full">
@@ -69,58 +82,59 @@ export function NetWorthChart() {
         </div>
       </div>
 
-        <div className="flex-1 w-full h-[250px] min-h-[250px] mt-4 relative">
-          {isLoadingHistory ? (
-            <div className="absolute inset-0 flex flex-col justify-end space-y-4 pb-2">
-              <div className="w-full h-1/2 bg-border/50 rounded-t-xl animate-pulse" />
-              <div className="flex justify-between px-2">
-                {[1, 2, 3, 4, 5].map((i) => (
-                  <div key={i} className="h-2 w-8 bg-border rounded animate-pulse" />
-                ))}
-              </div>
+      <div className="flex-1 w-full h-[250px] min-h-[250px] mt-4 relative">
+        {isLoadingHistory ? (
+          <div className="absolute inset-0 flex flex-col justify-end space-y-4 pb-2">
+            <div className="w-full h-1/2 bg-border/50 rounded-t-xl animate-pulse" />
+            <div className="flex justify-between px-2">
+              {[1, 2, 3, 4, 5].map((i) => (
+                <div key={i} className="h-2 w-8 bg-border rounded animate-pulse" />
+              ))}
             </div>
-          ) : (
-            <ResponsiveContainer width="100%" height="100%">
-              <AreaChart data={history || []} margin={{ top: 10, right: 0, left: 0, bottom: 0 }}>
-                <defs>
-                  <linearGradient id="colorValue" x1="0" y1="0" x2="0" y2="1">
-                    <stop offset="5%" stopColor="#059A83" stopOpacity={0.3} />
-                    <stop offset="95%" stopColor="#059A83" stopOpacity={0} />
-                  </linearGradient>
-                </defs>
-                <XAxis 
-                  dataKey="time" 
-                  axisLine={false} 
-                  tickLine={false} 
-                  tick={{ fontSize: 10, fill: '#92A29F' }}
-                  minTickGap={30}
-                />
-                <Tooltip 
-                  contentStyle={{ 
-                    borderRadius: '8px', 
-                    border: '1px solid #DBDFDF',
-                    boxShadow: '0 4px 6px -1px rgb(0 0 0 / 0.1)',
-                    fontSize: '12px',
-                    fontWeight: 500,
-                    color: '#13342F'
-                  }}
-                  itemStyle={{ color: '#059A83', fontWeight: 600 }}
-                  formatter={(value: any) => [`$${Number(value).toLocaleString()}`, 'Value']}
-                  labelStyle={{ color: '#687D7A', marginBottom: '4px' }}
-                />
-                <Area
-                  type="monotone"
-                  dataKey="value"
-                  stroke="#059A83"
-                  strokeWidth={2.5}
-                  fillOpacity={1}
-                  fill="url(#colorValue)"
-                  animationDuration={1500}
-                />
-              </AreaChart>
-            </ResponsiveContainer>
-          )}
-        </div>
+          </div>
+        ) : (
+          <ResponsiveContainer width="100%" height="100%">
+            <AreaChart data={history || []} margin={{ top: 10, right: 0, left: 0, bottom: 0 }}>
+              <defs>
+                <linearGradient id="colorValue" x1="0" y1="0" x2="0" y2="1">
+                  <stop offset="5%" stopColor="var(--color-primary)" stopOpacity={0.3} />
+                  <stop offset="95%" stopColor="var(--color-primary)" stopOpacity={0} />
+                </linearGradient>
+              </defs>
+              <XAxis 
+                dataKey="time" 
+                axisLine={false} 
+                tickLine={false} 
+                tick={{ fontSize: 10, fill: 'var(--color-text-disabled)' }}
+                minTickGap={30}
+              />
+              <Tooltip 
+                contentStyle={{ 
+                  borderRadius: '8px', 
+                  border: '1px solid var(--color-border)',
+                  boxShadow: '0 4px 6px -1px rgb(0 0 0 / 0.1)',
+                  fontSize: '12px',
+                  fontWeight: 500,
+                  color: 'var(--color-text-default)',
+                  backgroundColor: 'var(--color-surface)'
+                }}
+                itemStyle={{ color: 'var(--color-primary)', fontWeight: 600 }}
+                formatter={(value: any) => [`$${Number(value).toLocaleString()}`, 'Value']}
+                labelStyle={{ color: 'var(--color-text-neutral)', marginBottom: '4px' }}
+              />
+              <Area
+                type="monotone"
+                dataKey="value"
+                stroke="var(--color-primary)"
+                strokeWidth={2.5}
+                fillOpacity={1}
+                fill="url(#colorValue)"
+                animationDuration={1500}
+              />
+            </AreaChart>
+          </ResponsiveContainer>
+        )}
+      </div>
     </div>
   );
 }

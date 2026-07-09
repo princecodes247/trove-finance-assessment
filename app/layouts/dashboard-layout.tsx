@@ -2,11 +2,16 @@ import { Outlet, useLoaderData } from "react-router";
 import { Sidebar } from "../components/layout/sidebar";
 import { Header } from "../components/layout/header";
 import { apiClient } from "../../lib/api-client";
-import { QueryClient, dehydrate, HydrationBoundary } from "@tanstack/react-query";
+import { createQueryClient } from "../../lib/query-client";
+import { dashboardKeys } from "../../lib/query-keys";
+import { dehydrate, HydrationBoundary } from "@tanstack/react-query";
 
 export async function loader() {
-  const queryClient = new QueryClient();
-  await queryClient.prefetchQuery({ queryKey: ['user'], queryFn: apiClient.getUser });
+  const queryClient = createQueryClient();
+  await queryClient.prefetchQuery({ 
+    queryKey: dashboardKeys.user(), 
+    queryFn: apiClient.getUser 
+  });
   return { dehydratedState: dehydrate(queryClient) };
 }
 

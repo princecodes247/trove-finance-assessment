@@ -1,30 +1,36 @@
 import { Plus, Minus } from "lucide-react";
 import { useQuery } from "@tanstack/react-query";
 import { apiClient } from "../../../lib/api-client";
+import { dashboardKeys } from "../../../lib/query-keys";
+import { formatDeterministicFullDate } from "../../../lib/data/utils";
 
 export function TransactionsList() {
   const getStatusBadge = (status: string) => {
     switch (status) {
       case "COMPLETED":
-        return <span className="bg-[#66E2B3] text-text-default text-[10px] font-bold px-2 py-0.5 rounded-full uppercase">Completed</span>;
+        return <span className="bg-primary-light text-primary text-[10px] font-bold px-2 py-0.5 rounded-full uppercase">Completed</span>;
       case "PENDING":
-        return <span className="bg-[#F2C891] text-text-default text-[10px] font-bold px-2 py-0.5 rounded-full uppercase">Pending</span>;
+        return <span className="bg-cream/40 text-text-neutral text-[10px] font-bold px-2 py-0.5 rounded-full uppercase">Pending</span>;
       case "FAILED":
-        return <span className="bg-[#FF9B9B] text-[#BF221C] text-[10px] font-bold px-2 py-0.5 rounded-full uppercase">Failed</span>;
+        return <span className="bg-negative/10 text-negative text-[10px] font-bold px-2 py-0.5 rounded-full uppercase">Failed</span>;
       default:
         return null;
     }
   };
 
-  const formatDate = (dateString: string) => {
-    const d = new Date(dateString);
-    return d.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
-  };
-
-  const { data, isLoading } = useQuery({
-    queryKey: ['transactions'],
+  const { data, isLoading, isError } = useQuery({
+    queryKey: dashboardKeys.transactions(),
     queryFn: apiClient.getTransactions
   });
+
+  if (isError) {
+    return (
+      <div className="flex flex-col h-full bg-surface border border-border rounded-xl p-6 shadow-sm justify-center items-center min-h-[300px]">
+        <p className="text-negative font-semibold mb-2">Failed to load transactions</p>
+        <p className="text-text-neutral text-[13px]">Please check your connection and try again.</p>
+      </div>
+    );
+  }
 
   return (
     <div className="flex flex-col h-full">
@@ -61,7 +67,7 @@ export function TransactionsList() {
               key={tx.id} 
               className={`p-4 flex items-center ${index !== 0 ? 'border-t border-border' : ''}`}
             >
-              <div className={`w-10 h-10 rounded-full flex items-center justify-center mr-4 shrink-0 ${isBuy ? 'bg-[#A7EFDC] text-[#059A83]' : 'bg-[#D1E0DC] text-[#13342F]'}`}>
+              <div className={`w-10 h-10 rounded-full flex items-center justify-center mr-4 shrink-0 ${isBuy ? 'bg-primary-light text-primary' : 'bg-neutral-200 text-text-neutral'}`}>
                 {isBuy ? <Plus className="w-5 h-5" strokeWidth={3} /> : <Minus className="w-5 h-5" strokeWidth={3} />}
               </div>
               
@@ -70,7 +76,7 @@ export function TransactionsList() {
                   {isBuy ? 'Buy' : 'Sell'} {tx.name}
                 </div>
                 <div className="text-[11px] text-text-neutral">
-                  {formatDate(tx.date)} • {tx.shares.toFixed(2)} Shares
+                  {formatDeterministicFullDate(tx.date)} • {tx.shares.toFixed(2)} Shares
                 </div>
               </div>
 
