@@ -2,6 +2,7 @@ import React from "react";
 import { useQuery } from "@tanstack/react-query";
 import { apiClient } from "../../../lib/api-client";
 import { dashboardKeys } from "../../../lib/query-keys";
+import { formatPrice } from "../../../lib/data/utils";
 
 export function PortfolioCards() {
   const { data: holdings, isLoading, isError } = useQuery({
@@ -61,7 +62,7 @@ export function PortfolioCards() {
         <div key={card.title} className="min-w-[260px] snap-center lg:min-w-0 lg:snap-none bg-surface border border-border rounded-xl p-6 shadow-sm h-[126px]">
           <div className="text-[12px] font-medium text-text-neutral mb-2">{card.title}</div>
           <div className="text-[18px] font-bold text-text-default mb-2">
-            ${card.value.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+            {formatPrice(card.value)}
           </div>
           <div className="text-[12px] font-medium text-text-neutral">
             {card.positions} position{card.positions !== 1 && 's'}

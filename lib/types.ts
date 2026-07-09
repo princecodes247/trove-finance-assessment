@@ -21,6 +21,7 @@ export interface IHolding {
   currency: string;
 }
 
+export type TransactionStatus = "COMPLETED" | "PENDING" | "FAILED";
 export interface ITransaction {
   id: string;
   type: "BUY" | "SELL";
@@ -30,7 +31,7 @@ export interface ITransaction {
   pricePerShare: number;
   totalAmount: number;
   date: string;
-  status: "COMPLETED" | "PENDING" | "FAILED";
+  status: TransactionStatus;
 }
 
 export type TimeSpan = "1D" | "1W" | "1M" | "ALL";

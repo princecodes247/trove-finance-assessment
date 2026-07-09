@@ -4,6 +4,7 @@ import { AreaChart, Area, ResponsiveContainer, XAxis, Tooltip } from "recharts";
 import { useQuery } from "@tanstack/react-query";
 import { apiClient } from "../../../lib/api-client";
 import { dashboardKeys } from "../../../lib/query-keys";
+import { formatPrice } from "../../../lib/data/utils";
 import type { TimeSpan } from "../../../lib/types";
 
 const spanToDays: Record<TimeSpan, number> = {
@@ -61,7 +62,7 @@ export function NetWorthChart() {
             ) : (
               <span className="text-[28px] font-semibold text-text-default">
                 {isWorthVisible 
-                  ? `$${summary?.totalPortfolioValue.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`
+                  ? formatPrice(summary?.totalPortfolioValue ?? 0)
                   : '****'}
               </span>
             )}
