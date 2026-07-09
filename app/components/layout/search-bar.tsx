@@ -1,5 +1,5 @@
 import { useState, useRef, useEffect } from "react";
-import { Search } from "lucide-react";
+import { MdOutlineSearch } from "react-icons/md";
 import { mockStocks } from "~/../lib/data/mock-stocks";
 
 export function SearchBar() {
@@ -26,7 +26,7 @@ export function SearchBar() {
 
   return (
     <div className="relative flex items-center flex-1 sm:flex-none mr-4 md:h-full md:py-3" ref={searchRef}>
-      <Search className="absolute left-4 w-4 h-4 text-text-neutral z-20" strokeWidth={2.5} />
+      <MdOutlineSearch className="absolute left-4 w-4 h-4 text-text-neutral z-20" />
       <input
         type="text"
         placeholder="Search stocks..."

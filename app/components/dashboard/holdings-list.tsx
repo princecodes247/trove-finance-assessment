@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Search } from "lucide-react";
+
 import { useQuery } from "@tanstack/react-query";
 import { apiClient } from "../../../lib/api-client";
 import { SECTOR_METADATA, sectorOrder, type Sector } from "../../../lib/constants/sectors";

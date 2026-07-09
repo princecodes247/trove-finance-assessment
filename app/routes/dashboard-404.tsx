@@ -1,13 +1,13 @@
 import { Link } from "react-router";
 import { Button } from "~/components/ui/button";
-import { FileQuestion } from "lucide-react";
+import { MdOutlineHelpOutline } from "react-icons/md";
 
 export default function Dashboard404() {
   return (
     <div className="h-full w-full flex flex-col items-center justify-center p-6 min-h-[60vh]">
       <div className="max-w-md w-full text-center space-y-6 flex flex-col items-center">
         <div className="w-24 h-24 flex items-center justify-center">
-          <FileQuestion className="w-12 h-12 text-gray-400" />
+          <MdOutlineHelpOutline className="w-12 h-12 text-gray-400" />
         </div>
         
         <div className="space-y-2">

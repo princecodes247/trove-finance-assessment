@@ -1,4 +1,4 @@
-import { Bell, HelpCircle } from "lucide-react";
+import { MdOutlineNotifications, MdOutlineHelpOutline } from "react-icons/md";
 import { SearchBar } from "./search-bar";
 
 export function Header() {
@@ -13,14 +13,14 @@ export function Header() {
             className="hover:text-primary transition-colors relative"
             title="Notifications"
           >
-            <Bell className="w-[20px] h-[20px] sm:w-[22px] sm:h-[22px]" strokeWidth={2} />
+            <MdOutlineNotifications className="w-[20px] h-[20px] sm:w-[22px] sm:h-[22px]" />
             <span className="absolute top-0 right-0 w-2 h-2 bg-red-500 rounded-full border-2 border-surface animate-pulse" />
           </button>
           <button 
             className="hover:text-primary transition-colors"
             title="Help & Resources"
           >
-            <HelpCircle className="w-[20px] h-[20px] sm:w-[22px] sm:h-[22px]" strokeWidth={2} />
+            <MdOutlineHelpOutline className="w-[20px] h-[20px] sm:w-[22px] sm:h-[22px]" />
           </button>
         </div>
       </div>

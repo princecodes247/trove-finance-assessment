@@ -1,6 +1,6 @@
 import { Form, redirect, Link, useActionData, useNavigation, useSubmit } from "react-router";
 import { useState, useEffect, useRef } from "react";
-import { Eye, EyeOff, Loader2 } from "lucide-react";
+import { MdOutlineVisibility, MdOutlineVisibilityOff, MdOutlineSync } from "react-icons/md";
 import { loginSchema, validateForm } from "~/../lib/schemas";
 import { apiClient } from "~/../lib/api-client";
 import { Input } from "../components/ui/input";
@@ -107,7 +107,7 @@ export default function Login() {
               disabled={isSubmitting}
               className="absolute right-3 top-[22px] -translate-y-1/2 text-text-neutral hover:text-text-default transition-colors p-1 disabled:opacity-50"
             >
-              {showPassword ? <EyeOff className="w-4 h-4" strokeWidth={2} /> : <Eye className="w-4 h-4" strokeWidth={2} />}
+              {showPassword ? <MdOutlineVisibilityOff className="w-4 h-4" /> : <MdOutlineVisibility className="w-4 h-4" />}
             </button>
           </div>
         </div>
@@ -118,7 +118,7 @@ export default function Login() {
             disabled={isSubmitting}
             className="w-full cursor-pointer shadow-sm flex items-center justify-center gap-2"
           >
-            {isSubmitting && <Loader2 className="w-4 h-4 animate-spin" />}
+            {isSubmitting && <MdOutlineSync className="w-4 h-4 animate-spin" />}
             {isSubmitting ? "Signing in..." : "Sign in"}
           </Button>
         </div>

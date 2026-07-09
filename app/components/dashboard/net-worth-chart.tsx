@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Eye, EyeOff, TrendingUp } from "lucide-react";
+import { MdOutlineVisibility, MdOutlineVisibilityOff, MdOutlineTrendingUp } from "react-icons/md";
 import { AreaChart, Area, ResponsiveContainer, XAxis, Tooltip } from "recharts";
 import { useQuery } from "@tanstack/react-query";
 import { apiClient } from "../../../lib/api-client";
@@ -50,9 +50,9 @@ export function NetWorthChart() {
           <div className="flex items-center space-x-2 text-text-neutral mb-2">
             <span className="text-[14px] font-medium">Total Net Worth</span>
             {isWorthVisible ? (
-              <Eye className="w-4 h-4 cursor-pointer hover:text-text-default transition-colors" onClick={() => setIsWorthVisible(false)} />
+              <MdOutlineVisibility className="w-4 h-4 cursor-pointer hover:text-text-default transition-colors" onClick={() => setIsWorthVisible(false)} />
             ) : (
-              <EyeOff className="w-4 h-4 cursor-pointer hover:text-text-default transition-colors" onClick={() => setIsWorthVisible(true)} />
+              <MdOutlineVisibilityOff className="w-4 h-4 cursor-pointer hover:text-text-default transition-colors" onClick={() => setIsWorthVisible(true)} />
             )}
           </div>
           <div className="flex items-center space-x-3">
@@ -66,7 +66,7 @@ export function NetWorthChart() {
               </span>
             )}
             <div className={`flex items-center space-x-1 text-[13px] font-medium px-2 py-0.5 rounded-full ${isPositive ? 'text-positive' : 'text-negative'}`}>
-              <TrendingUp className={`w-3.5 h-3.5 ${!isPositive && 'rotate-180'}`} />
+              <MdOutlineTrendingUp className={`w-3.5 h-3.5 ${!isPositive && 'rotate-180'}`} />
               <span>{isPositive ? '+' : ''}{percentageChange.toFixed(2)}%</span>
             </div>
           </div>

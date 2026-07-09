@@ -1,5 +1,5 @@
 import { Link, useLocation } from "react-router";
-import { LayoutGrid, Wallet, ReceiptText, TrendingUp, Settings } from "lucide-react";
+import { MdOutlineDashboard, MdOutlineAccountBalanceWallet, MdOutlineReceipt, MdOutlineReceiptLong, MdOutlineTrendingUp, MdOutlineSettings } from "react-icons/md";
 import { useQuery } from "@tanstack/react-query";
 import { apiClient } from "../../../lib/api-client";
 import { Button } from "../ui/button";
@@ -14,11 +14,11 @@ export function Sidebar() {
   });
 
   const navItems = [
-    { name: "Dashboard", path: "/dashboard", icon: LayoutGrid },
-    { name: "Portfolio", path: "/dashboard/portfolio", icon: Wallet },
-    { name: "Transactions", path: "/dashboard/transactions", icon: ReceiptText },
-    { name: "Markets", path: "/dashboard/markets", icon: TrendingUp },
-    { name: "Settings", path: "/dashboard/settings", icon: Settings },
+    { name: "Dashboard", path: "/dashboard", icon: MdOutlineDashboard },
+    { name: "Portfolio", path: "/dashboard/portfolio", icon: MdOutlineAccountBalanceWallet },
+    { name: "Transactions", path: "/dashboard/transactions", icon: MdOutlineReceiptLong },
+    { name: "Markets", path: "/dashboard/markets", icon: MdOutlineTrendingUp },
+    { name: "Settings", path: "/dashboard/settings", icon: MdOutlineSettings },
   ];
 
   return (
@@ -41,7 +41,7 @@ export function Sidebar() {
                   : "text-text-neutral hover:text-text-default font-medium hover:bg-default"
               }`}
             >
-              <Icon className="w-[18px] h-[18px] mr-4" strokeWidth={isActive ? 2.5 : 2} />
+              <Icon className="w-[22px] h-[22px] mr-4" />
               <span className="text-[15px]">{item.name}</span>
             </Link>
           );

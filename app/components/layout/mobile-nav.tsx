@@ -1,15 +1,15 @@
 import { Link, useLocation } from "react-router";
-import { LayoutGrid, Wallet, ReceiptText, TrendingUp, Settings } from "lucide-react";
+import { MdOutlineDashboard, MdOutlineAccountBalanceWallet, MdOutlineReceiptLong, MdOutlineTrendingUp, MdOutlineSettings } from "react-icons/md";
 
 export function MobileNav() {
   const location = useLocation();
 
   const navItems = [
-    { name: "Dashboard", path: "/dashboard", icon: LayoutGrid },
-    { name: "Portfolio", path: "/dashboard/portfolio", icon: Wallet },
-    { name: "Orders", path: "/dashboard/transactions", icon: ReceiptText },
-    { name: "Markets", path: "/dashboard/markets", icon: TrendingUp },
-    { name: "Settings", path: "/dashboard/settings", icon: Settings },
+    { name: "Dashboard", path: "/dashboard", icon: MdOutlineDashboard },
+    { name: "Portfolio", path: "/dashboard/portfolio", icon: MdOutlineAccountBalanceWallet },
+    { name: "Orders", path: "/dashboard/transactions", icon: MdOutlineReceiptLong },
+    { name: "Markets", path: "/dashboard/markets", icon: MdOutlineTrendingUp },
+    { name: "Settings", path: "/dashboard/settings", icon: MdOutlineSettings },
   ];
 
   return (
@@ -27,7 +27,7 @@ export function MobileNav() {
                 : "text-text-disabled hover:text-text-neutral"
             }`}
           >
-            <Icon className="w-[22px] h-[22px]" strokeWidth={isActive ? 2.5 : 2} />
+            <Icon className="w-[22px] h-[22px]" />
             <span className={`text-[10px] ${isActive ? 'font-bold' : 'font-medium'}`}>
               {item.name}
             </span>

@@ -1,14 +1,14 @@
 import { Link } from "react-router";
 import { Button } from "~/components/ui/button";
 import { AuthCard } from "~/components/ui/auth-card";
-import { Compass, FileQuestion } from "lucide-react";
+import { MdOutlineExplore, MdOutlineHelpOutline } from "react-icons/md";
 
 export default function Public404() {
   return (
     <AuthCard>
       <div className="flex flex-col items-center text-center py-6">
         <div className="w-20 h-20 rounded-full flex items-center justify-center mb-6">
-          <FileQuestion className="w-10 h-10 text-primary animate-pulse" />
+          <MdOutlineHelpOutline className="w-10 h-10 text-primary animate-pulse" />
         </div>
         
         <h1 className="text-4xl font-extrabold text-text-default tracking-tight mb-3">404</h1>

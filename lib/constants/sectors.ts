@@ -1,4 +1,5 @@
-import { LayoutGrid, Building2, Stethoscope, Landmark, Film, ShoppingCart, type LucideIcon } from "lucide-react";
+import { MdOutlineDirectionsCar, MdOutlineMedicalServices, MdOutlineAccountBalance, MdOutlineMovie, MdOutlineShoppingCart, MdOutlineApps } from "react-icons/md";
+import type { IconType } from "react-icons";
 
 export const SECTORS = [
   "Technology",
@@ -13,39 +14,39 @@ export type Sector = typeof SECTORS[number];
 export interface ISectorMetadata {
   name: Sector;
   color: string;
-  icon: LucideIcon;
+  icon: IconType;
 }
 
-export const SECTOR_METADATA: Record<Sector | "Default", ISectorMetadata | { name: string; color: string; icon: LucideIcon }> = {
+export const SECTOR_METADATA: Record<Sector | "Default", ISectorMetadata | { name: string; color: string; icon: IconType }> = {
   Technology: {
     name: "Technology",
     color: "bg-primary",
-    icon: LayoutGrid,
+    icon: MdOutlineApps,
   },
   Automotive: {
     name: "Automotive",
     color: "bg-accent-blue",
-    icon: Building2,
+    icon: MdOutlineDirectionsCar,
   },
   Healthcare: {
     name: "Healthcare",
     color: "bg-primary-light",
-    icon: Stethoscope,
+    icon: MdOutlineMedicalServices,
   },
   Finance: {
     name: "Finance",
     color: "bg-purple",
-    icon: Landmark,
+    icon: MdOutlineAccountBalance,
   },
   Entertainment: {
     name: "Entertainment",
     color: "bg-cream",
-    icon: Film,
+    icon: MdOutlineMovie,
   },
   Default: {
     name: "Other",
     color: "bg-text-disabled",
-    icon: ShoppingCart,
+    icon: MdOutlineShoppingCart,
   }
 };
 

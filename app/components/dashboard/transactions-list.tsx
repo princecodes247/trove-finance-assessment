@@ -1,4 +1,4 @@
-import { Plus, Minus } from "lucide-react";
+import { MdOutlineAdd, MdOutlineRemove } from "react-icons/md";
 import { useQuery } from "@tanstack/react-query";
 import { apiClient } from "../../../lib/api-client";
 import { dashboardKeys } from "../../../lib/query-keys";
@@ -68,7 +68,7 @@ export function TransactionsList() {
               className={`p-4 flex items-center ${index !== 0 ? 'border-t border-border' : ''}`}
             >
               <div className={`w-10 h-10 rounded-full flex items-center justify-center mr-4 shrink-0 ${isBuy ? 'bg-primary-light text-primary' : 'bg-neutral-200 text-text-neutral'}`}>
-                {isBuy ? <Plus className="w-5 h-5" strokeWidth={3} /> : <Minus className="w-5 h-5" strokeWidth={3} />}
+                {isBuy ? <MdOutlineAdd className="w-5 h-5" /> : <MdOutlineRemove className="w-5 h-5" />}
               </div>
               
               <div className="flex-1">
