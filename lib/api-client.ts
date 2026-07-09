@@ -1,4 +1,5 @@
 import portfolioData from "./data/portfolio_data.json";
+import { generateProceduralCurve } from "./data/utils";
 
 // Simulate network delay
 const delay = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
@@ -37,5 +38,15 @@ export const apiClient = {
   getTransactions: async () => {
     await delay(900);
     return portfolioData.transactions as TTransaction[];
+  },
+  getPortfolioHistory: async (days = 90, volatilityRange: [number, number] = [-0.015, 0.015]) => {
+    await delay(600);
+    return generateProceduralCurve({
+      startValue: portfolioData.summary.totalInvested,
+      endValue: portfolioData.summary.totalPortfolioValue,
+      days,
+      volatilityRange,
+      endDate: portfolioData.user.lastUpdated
+    });
   }
 };
