@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Eye, TrendingUp } from "lucide-react";
+import { Eye, EyeOff, TrendingUp } from "lucide-react";
 import { AreaChart, Area, ResponsiveContainer, XAxis, Tooltip } from "recharts";
 import { useQuery } from "@tanstack/react-query";
 import { apiClient } from "../../../lib/api-client";
@@ -15,6 +15,7 @@ const spanToDays: Record<TimeSpan, number> = {
 
 export function NetWorthChart() {
   const [selectedSpan, setSelectedSpan] = useState<TimeSpan>("1D");
+  const [isWorthVisible, setIsWorthVisible] = useState(true);
   
   const { data: summary, isLoading: isLoadingSummary, isError: isErrorSummary } = useQuery({
     queryKey: dashboardKeys.summary(),
@@ -48,14 +49,20 @@ export function NetWorthChart() {
         <div>
           <div className="flex items-center space-x-2 text-text-neutral mb-2">
             <span className="text-[14px] font-medium">Total Net Worth</span>
-            <Eye className="w-4 h-4 cursor-pointer hover:text-text-default transition-colors" />
+            {isWorthVisible ? (
+              <Eye className="w-4 h-4 cursor-pointer hover:text-text-default transition-colors" onClick={() => setIsWorthVisible(false)} />
+            ) : (
+              <EyeOff className="w-4 h-4 cursor-pointer hover:text-text-default transition-colors" onClick={() => setIsWorthVisible(true)} />
+            )}
           </div>
           <div className="flex items-center space-x-3">
             {isLoading ? (
               <div className="h-8 w-32 bg-border rounded animate-pulse" />
             ) : (
               <span className="text-[28px] font-semibold text-text-default">
-                ${summary?.totalPortfolioValue.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+                {isWorthVisible 
+                  ? `$${summary?.totalPortfolioValue.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`
+                  : '****'}
               </span>
             )}
             <div className={`flex items-center space-x-1 text-[13px] font-medium px-2 py-0.5 rounded-full ${isPositive ? 'text-positive' : 'text-negative'}`}>
