@@ -1,4 +1,5 @@
 import React from "react";
+import { Logo } from "./logo";
 
 interface AuthCardProps {
   children: React.ReactNode;
@@ -21,9 +22,7 @@ interface AuthHeaderProps {
 export function AuthHeader({ title, subtitle }: AuthHeaderProps) {
   return (
     <div className="flex flex-col items-center mb-8">
-      <div className="w-13 h-13 bg-primary rounded-xl flex items-center justify-center text-white text-[18px] mb-4 shadow-sm font-medium">
-        T
-      </div>
+      <Logo className="w-14 h-14 rounded-2xl mb-4 shadow-sm" />
       <h2 className="text-xl font-semibold text-text-default tracking-tight mb-2">{title}</h2>
       <p className="text-sm text-text-neutral">{subtitle}</p>
     </div>

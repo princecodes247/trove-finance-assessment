@@ -10,7 +10,15 @@ import {
 import type { Route } from "./+types/root";
 import "./app.css";
 
+export function meta() {
+  return [
+    { title: "Trove Finance" },
+    { name: "description", content: "Sleek wealth management, stock trading, and portfolio tracking by Trove." }
+  ];
+}
+
 export const links: Route.LinksFunction = () => [
+  { rel: "icon", type: "image/svg+xml", href: "/icon.svg" },
   { rel: "preconnect", href: "https://fonts.googleapis.com" },
   {
     rel: "preconnect",

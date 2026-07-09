@@ -3,6 +3,13 @@ import { Button } from "~/components/ui/button";
 import { AuthCard } from "~/components/ui/auth-card";
 import { MdOutlineExplore, MdOutlineHelpOutline } from "react-icons/md";
 
+export function meta() {
+  return [
+    { title: "Page Not Found | Trove Finance" },
+    { name: "description", content: "The page you're looking for doesn't exist." }
+  ];
+}
+
 export default function Public404() {
   return (
     <AuthCard>

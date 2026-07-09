@@ -2,6 +2,13 @@ import { Link } from "react-router";
 import { Button } from "~/components/ui/button";
 import { MdOutlineHelpOutline } from "react-icons/md";
 
+export function meta() {
+  return [
+    { title: "Page Not Found | Trove Finance Dashboard" },
+    { name: "description", content: "The page you're looking for doesn't exist." }
+  ];
+}
+
 export default function Dashboard404() {
   return (
     <div className="h-full w-full flex flex-col items-center justify-center p-6 min-h-[60vh]">

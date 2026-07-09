@@ -1,5 +1,6 @@
 import { Link, useLocation } from "react-router";
 import { MdOutlineDashboard, MdOutlineAccountBalanceWallet, MdOutlineReceipt, MdOutlineReceiptLong, MdOutlineTrendingUp, MdOutlineSettings } from "react-icons/md";
+import { Logo } from "../ui/logo";
 import { useQuery } from "@tanstack/react-query";
 import { apiClient } from "../../../lib/api-client";
 import { Button } from "../ui/button";
@@ -23,7 +24,8 @@ export function Sidebar() {
 
   return (
     <aside className="w-[260px] h-screen sticky top-0 overflow-y-auto bg-canvas border-r border-border hidden lg:flex flex-col">
-      <div className="p-8 pb-10">
+      <div className="p-8 pb-10 flex items-center space-x-3">
+        <Logo className="w-8 h-8 rounded-lg" />
         <h1 className="text-xl font-extrabold text-primary">Trove</h1>
       </div>
       

@@ -8,6 +8,13 @@ import { Label } from "~/components/ui/label";
 import { Button } from "~/components/ui/button";
 import { AuthCard, AuthHeader } from "~/components/ui/auth-card";
 
+export function meta() {
+  return [
+    { title: "Sign In | Trove Finance" },
+    { name: "description", content: "Access your Trove wealth account." }
+  ];
+}
+
 export async function action({ request }: { request: Request }) {
   const formData = Object.fromEntries(await request.formData());
   const validation = await validateForm(loginSchema, formData);

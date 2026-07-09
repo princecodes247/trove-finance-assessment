@@ -5,6 +5,13 @@ import { PortfolioCards } from "../components/dashboard/portfolio-cards";
 import { HoldingsList } from "../components/dashboard/holdings-list";
 import { TransactionsList } from "../components/dashboard/transactions-list";
 
+export function meta() {
+  return [
+    { title: "Dashboard | Trove Finance" },
+    { name: "description", content: "View your real-time net worth, holdings, and portfolio allocation." }
+  ];
+}
+
 export default function Dashboard() {
   const [activeTab, setActiveTab] = useState<'holdings' | 'transactions'>('holdings');
 
