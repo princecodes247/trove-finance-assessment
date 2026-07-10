@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { MdOutlineAdd, MdOutlineRemove } from "react-icons/md";
+import { MdOutlineAdd, MdOutlineRemove, MdOutlineSync } from "react-icons/md";
 import { useQuery } from "@tanstack/react-query";
 import { apiClient } from "../../../lib/api-client";
 import { dashboardKeys } from "../../../lib/query-keys";
@@ -11,7 +11,12 @@ function TransactionStatusBadge({ status }: { status: TransactionStatus }) {
     case "COMPLETED":
       return <span className="bg-primary-light text-primary text-[10px] font-bold px-2 py-0.5 rounded-full uppercase">Completed</span>;
     case "PENDING":
-      return <span className="bg-cream/40 text-amber-500/90 text-[10px] font-bold px-2 py-0.5 rounded-full uppercase">Pending</span>;
+      return (
+        <span className="flex items-center gap-1 bg-cream/40 text-amber-500/90 text-[10px] font-bold pl-1.5 pr-2 py-0.5 rounded-full uppercase">
+          <MdOutlineSync className="w-3 h-3 animate-spin" />
+          Pending
+        </span>
+      );
     case "FAILED":
       return <span className="bg-negative/10 text-negative text-[10px] font-bold px-2 py-0.5 rounded-full uppercase">Failed</span>;
     default:
@@ -42,9 +47,10 @@ interface TransactionItemProps {
 
 function TransactionItem({ tx, showBorder }: TransactionItemProps) {
   const isBuy = tx.type === "BUY";
+  const isPending = tx.status === "PENDING";
 
   return (
-    <div className={`p-4 flex items-center ${showBorder ? 'border-t border-border' : ''}`}>
+    <div className={`p-4 flex items-center ${showBorder ? 'border-t border-border' : ''} ${isPending ? 'opacity-60 hover:opacity-100 transition-opacity' : ''}`}>
       <div className={`w-10 h-10 rounded-full flex items-center justify-center mr-4 shrink-0 ${isBuy ? 'bg-primary-light text-primary' : 'bg-neutral-200 text-text-neutral'}`}>
         {isBuy ? <MdOutlineAdd className="w-5 h-5" /> : <MdOutlineRemove className="w-5 h-5" />}
       </div>

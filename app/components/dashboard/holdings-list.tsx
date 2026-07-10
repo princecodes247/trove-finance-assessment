@@ -190,7 +190,7 @@ export function HoldingsList() {
       <SearchInput
         placeholder="Search by ticker or name..."
         value={searchQuery}
-        onChange={(e) => setSearchQuery(e.target.value)}
+        onSearch={setSearchQuery}
       />
     </div>
 
