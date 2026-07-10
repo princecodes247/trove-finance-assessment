@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { MdOutlineAdd, MdOutlineRemove } from "react-icons/md";
 import { useQuery } from "@tanstack/react-query";
 import { apiClient } from "../../../lib/api-client";
@@ -10,7 +11,7 @@ function TransactionStatusBadge({ status }: { status: TransactionStatus }) {
     case "COMPLETED":
       return <span className="bg-primary-light text-primary text-[10px] font-bold px-2 py-0.5 rounded-full uppercase">Completed</span>;
     case "PENDING":
-      return <span className="bg-cream/40 text-text-neutral text-[10px] font-bold px-2 py-0.5 rounded-full uppercase">Pending</span>;
+      return <span className="bg-cream/40 text-amber-500/90 text-[10px] font-bold px-2 py-0.5 rounded-full uppercase">Pending</span>;
     case "FAILED":
       return <span className="bg-negative/10 text-negative text-[10px] font-bold px-2 py-0.5 rounded-full uppercase">Failed</span>;
     default:
@@ -77,9 +78,19 @@ function TransactionsError() {
 }
 
 export function TransactionsList() {
+  const [activeFilter, setActiveFilter] = useState<"All" | "Buy" | "Sell">("All");
+  const [isExpanded, setIsExpanded] = useState(false);
+
   const { data, isLoading, isError } = useQuery({
     queryKey: dashboardKeys.transactions(),
     queryFn: apiClient.getTransactions
+  });
+
+  const filteredData = data?.filter((tx) => {
+    if (activeFilter === "All") return true;
+    if (activeFilter === "Buy") return tx.type === "BUY";
+    if (activeFilter === "Sell") return tx.type === "SELL";
+    return true;
   });
 
   if (isError) {
@@ -90,22 +101,56 @@ export function TransactionsList() {
     <div className="flex flex-col h-full">
       <div className="flex justify-end lg:justify-between items-end mb-4">
         <h3 className="hidden lg:block text-[16px] font-bold text-text-default">Recent Transactions</h3>
-        <button className="text-[12px] font-bold text-primary hover:text-primary/80 transition-colors">
-          View All
-        </button>
+        {filteredData && filteredData.length > 5 && (
+          <button 
+            onClick={() => setIsExpanded(!isExpanded)}
+            className="text-[12px] font-bold text-primary hover:text-primary/80 transition-colors"
+          >
+            {isExpanded ? "Collapse" : "View All"}
+          </button>
+        )}
+      </div>
+
+      <div className="flex gap-2 mb-4">
+        {["All", "Buy", "Sell"].map((filter) => (
+          <button
+            key={filter}
+            onClick={() => setActiveFilter(filter as any)}
+            className={`px-3 py-1.5 rounded-full text-[12px] font-medium transition-colors border ${
+              activeFilter === filter
+                ? 'bg-primary text-white border-primary'
+                : 'bg-canvas border-border text-text-neutral hover:border-text-neutral hover:text-text-default'
+            }`}
+          >
+            {filter}
+          </button>
+        ))}
       </div>
 
       <div className="bg-surface border border-border rounded-xl shadow-sm flex flex-col">
         {isLoading && (
           <>
-            {Array.from({ length: 3 }).map((_, index) => (
+            {Array.from({ length: 3 }, (_, index) => (
               <TransactionSkeletonItem key={index} showBorder={index !== 0} />
             ))}
           </>
         )}
-        {data?.slice(0, 5).map((tx, index) => (
+        {!isLoading && filteredData?.length === 0 && (
+          <div className="p-8 text-center text-text-neutral text-[13px]">
+            No transactions found.
+          </div>
+        )}
+        {(isExpanded ? filteredData : filteredData?.slice(0, 5))?.map((tx, index) => (
           <TransactionItem key={tx.id} tx={tx} showBorder={index !== 0} />
         ))}
+        {filteredData && filteredData.length > 5 && (
+          <button 
+            onClick={() => setIsExpanded(!isExpanded)}
+            className="w-full py-3 text-[13px] font-bold text-primary hover:text-primary/80 hover:bg-primary/5 transition-colors border-t border-border rounded-b-xl"
+          >
+            {isExpanded ? "Collapse" : "View All Transactions"}
+          </button>
+        )}
       </div>
     </div>
   );

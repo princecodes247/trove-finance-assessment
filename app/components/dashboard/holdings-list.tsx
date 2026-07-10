@@ -1,8 +1,9 @@
 import { useState } from "react";
 import { MdOutlineWarningAmber } from "react-icons/md";
+import { SearchInput } from "~/components/ui/search-input";
 import { useQuery } from "@tanstack/react-query";
 import { apiClient } from "../../../lib/api-client";
-import { SECTOR_METADATA, type Sector } from "../../../lib/constants/sectors";
+import { SECTOR_METADATA, SECTORS, type Sector } from "../../../lib/constants/sectors";
 import { dashboardKeys } from "../../../lib/query-keys";
 import { formatPrice } from "../../../lib/data/utils";
 
@@ -138,6 +139,7 @@ function HoldingsError() {
 export function HoldingsList() {
   const [searchQuery, setSearchQuery] = useState("");
   const [activeSector, setActiveSector] = useState("All");
+  const [isExpanded, setIsExpanded] = useState(false);
 
   const { data, isLoading, isError } = useQuery({
     queryKey: dashboardKeys.holdings(),
@@ -159,9 +161,37 @@ export function HoldingsList() {
     <div className="flex flex-col h-full">
     <div className="flex justify-end lg:justify-between items-end mb-4">
       <h3 className="hidden lg:block text-[16px] font-bold text-text-default">Holdings</h3>
-      <button className="text-[12px] font-bold text-primary hover:text-primary/80 transition-colors">
-        View All
-      </button>
+      {filteredData && filteredData.length > 5 && (
+        <button 
+          onClick={() => setIsExpanded(!isExpanded)}
+          className="text-[12px] font-bold text-primary hover:text-primary/80 transition-colors"
+        >
+          {isExpanded ? "Collapse" : "View All"}
+        </button>
+      )}
+    </div>
+
+    <div className="flex flex-col gap-3 mb-4">
+      <div className="flex overflow-x-auto gap-2 pb-2 hide-scrollbar items-center w-full">
+        {['All', ...SECTORS].map((sector) => (
+          <button
+            key={sector}
+            onClick={() => setActiveSector(sector)}
+            className={`px-3 py-1.5 rounded-full text-[12px] font-medium whitespace-nowrap transition-colors border ${
+              activeSector === sector 
+                ? 'bg-primary text-white border-primary' 
+                : 'bg-canvas border-border text-text-neutral hover:border-text-neutral hover:text-text-default'
+            }`}
+          >
+            {sector}
+          </button>
+        ))}
+      </div>
+      <SearchInput
+        placeholder="Search by ticker or name..."
+        value={searchQuery}
+        onChange={(e) => setSearchQuery(e.target.value)}
+      />
     </div>
 
       <div className="flex flex-col space-y-3">
@@ -175,9 +205,17 @@ export function HoldingsList() {
 
         {!isLoading && filteredData?.length === 0 && <HoldingsEmptyState />}
 
-        {filteredData?.map((holding) => (
+        {(isExpanded ? filteredData : filteredData?.slice(0, 5))?.map((holding) => (
           <HoldingItem key={holding.id} holding={holding} />
         ))}
+        {filteredData && filteredData.length > 5 && (
+          <button 
+            onClick={() => setIsExpanded(!isExpanded)}
+            className="w-full py-3 mt-2 text-[13px] font-bold text-primary hover:text-primary/80 hover:bg-primary/5 transition-colors rounded-xl border border-transparent hover:border-primary/20"
+          >
+            {isExpanded ? "Collapse" : "View All Holdings"}
+          </button>
+        )}
       </div>
     </div>
   );

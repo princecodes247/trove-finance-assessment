@@ -1,5 +1,5 @@
 import { useState, useRef, useEffect } from "react";
-import { MdOutlineSearch } from "react-icons/md";
+import { SearchInput } from "~/components/ui/search-input";
 import { mockStocks } from "~/../lib/data/mock-stocks";
 
 export function SearchBar() {
@@ -26,14 +26,13 @@ export function SearchBar() {
 
   return (
     <div className="relative flex items-center flex-1 sm:flex-none mr-4 md:h-full md:py-3" ref={searchRef}>
-      <MdOutlineSearch className="absolute left-4 w-4 h-4 text-text-neutral z-20" />
-      <input
-        type="text"
+      <SearchInput
         placeholder="Search stocks..."
         value={searchQuery}
         onChange={(e) => setSearchQuery(e.target.value)}
         onFocus={() => setIsSearchFocused(true)}
-        className="w-full sm:w-[320px] md:h-full border border-border bg-default text-[14px] text-text-default placeholder:text-text-disabled rounded-full py-2.5 pl-11 pr-4 focus:outline-none focus:ring-1 focus:ring-primary transition-all relative z-10"
+        className="sm:w-[320px] md:h-full"
+        containerClassName="md:h-full"
       />
       
       {/* Mock Typeahead Dropdown */}
