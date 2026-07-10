@@ -57,9 +57,9 @@ export function AssetAllocation() {
       
       {isLoading ? (
         <div className="flex-1 flex flex-col space-y-4">
-          <div className="h-4 w-full bg-border rounded-full animate-pulse" />
+          <div className="h-8 mb-12 w-full bg-border rounded-full animate-pulse" />
           <div className="grid grid-cols-2 gap-y-3">
-            {[1, 2, 3, 4].map(i => (
+            {Array.from({ length: 4 }).map((_, i) => (
               <div key={i} className="flex items-center">
                 <div className="w-2 h-2 rounded-full bg-border mr-2 animate-pulse" />
                 <div className="h-3 w-16 bg-border rounded animate-pulse" />

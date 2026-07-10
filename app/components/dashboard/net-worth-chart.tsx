@@ -1,11 +1,13 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { MdOutlineVisibility, MdOutlineVisibilityOff, MdOutlineTrendingUp } from "react-icons/md";
 import { AreaChart, Area, ResponsiveContainer, XAxis, Tooltip } from "recharts";
 import { useQuery } from "@tanstack/react-query";
 import { apiClient } from "../../../lib/api-client";
 import { dashboardKeys } from "../../../lib/query-keys";
-import { formatPrice } from "../../../lib/data/utils";
+import { formatPrice, numberFormatConfig } from "../../../lib/data/utils";
 import type { TimeSpan } from "../../../lib/types";
+import NumberFlow, { continuous } from "@number-flow/react";
+import { cn } from "../../../lib/utils";
 
 const spanToDays: Record<TimeSpan, number> = {
   "1D": 1,
@@ -17,7 +19,6 @@ const spanToDays: Record<TimeSpan, number> = {
 export function NetWorthChart() {
   const [selectedSpan, setSelectedSpan] = useState<TimeSpan>("1D");
   const [isWorthVisible, setIsWorthVisible] = useState(true);
-  
   const { data: summary, isLoading: isLoadingSummary, isError: isErrorSummary } = useQuery({
     queryKey: dashboardKeys.summary(),
     queryFn: apiClient.getSummary
@@ -57,18 +58,42 @@ export function NetWorthChart() {
             )}
           </div>
           <div className="flex items-center space-x-3">
-            {isLoading ? (
-              <div className="h-8 w-32 bg-border rounded animate-pulse" />
-            ) : (
-              <span className="text-[28px] font-semibold text-text-default">
+              <div className="relative min-w-38 text-[28px] font-semibold text-text-default">
+              <div className={
+                cn(
+                  "z-10 absolute top-1.5 -left-0.5 h-8 w-36 bg-border rounded",
+                  isLoading ? "animate-pulse" : "opacity-0")
+              } />
+
                 {isWorthVisible 
-                  ? formatPrice(summary?.totalPortfolioValue ?? 0)
+                  ? (
+                    <NumberFlow
+                    plugins={[continuous]}
+                      value={summary?.totalPortfolioValue ?? 0}
+                      className={isLoading ? 'opacity-0' : ''}
+                      format={numberFormatConfig}
+                      prefix="$"
+                    />
+                  )
                   : '****'}
-              </span>
-            )}
-            <div className={`flex items-center space-x-1 text-[13px] font-medium px-2 py-0.5 rounded-full ${isPositive ? 'text-positive' : 'text-negative'}`}>
-              <MdOutlineTrendingUp className={`w-3.5 h-3.5 ${!isPositive && 'rotate-180'}`} />
-              <span>{isPositive ? '+' : ''}{percentageChange.toFixed(2)}%</span>
+              </div>
+            <div className={`relative flex items-center space-x-1 text-[13px] font-medium px-2 py-0.5 rounded-full ${isPositive ? 'text-positive' : 'text-negative'}`}>
+              <div className={
+                cn(
+                  "z-10 absolute top-1 left-1 h-4 w-20 bg-border rounded",
+                  isLoading ? "animate-pulse delay-75" : "opacity-0"
+                )
+              } />
+              <MdOutlineTrendingUp className={`w-3.5 h-3.5 ${!isPositive && 'rotate-180'} ${isLoading ? 'opacity-0' : ''}`} />
+              <span className={`${isLoading ? 'opacity-0' : ''}`}>
+                    <NumberFlow
+                      value={percentageChange}
+                      className={isLoading ? 'opacity-0' : ''}
+                      format={numberFormatConfig}
+                      prefix={isPositive ? '+' : ''}
+                      suffix="%"
+                    />
+                </span>
             </div>
           </div>
         </div>

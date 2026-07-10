@@ -63,10 +63,11 @@ export function generateProceduralCurve({
   return history;
 }
 
+export const numberFormatConfig = { minimumFractionDigits: 2, maximumFractionDigits: 2 }
 /**
  * Formats a number as a USD price string with 2 decimal places.
  * Optionally prepends a sign prefix (e.g. "+$1,234.56" or "-$1,234.56").
  */
 export function formatPrice(value: number, prefix: string = ""): string {
-  return `${prefix}$${value.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
+  return `${prefix}$${value.toLocaleString(undefined, numberFormatConfig)}`;
 }
