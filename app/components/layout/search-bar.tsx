@@ -1,11 +1,15 @@
-import { useState, useRef, useEffect } from "react";
+import { useState, useCallback } from "react";
 import { SearchInput } from "~/components/ui/search-input";
 import { mockStocks } from "~/../lib/data/mock-stocks";
+import { useClickOutside } from "~/../lib/hooks/use-click-outside";
 
 export function SearchBar() {
   const [searchQuery, setSearchQuery] = useState("");
   const [isSearchFocused, setIsSearchFocused] = useState(false);
-  const searchRef = useRef<HTMLDivElement>(null);
+
+  const searchRef = useClickOutside<HTMLDivElement>(
+    useCallback(() => setIsSearchFocused(false), [])
+  );
 
   const filteredStocks = mockStocks.filter(
     (s) =>
@@ -13,31 +17,18 @@ export function SearchBar() {
       s.name.toLowerCase().includes(searchQuery.toLowerCase())
   );
 
-  // Close search dropdown when clicking outside
-  useEffect(() => {
-    const handleClickOutside = (event: MouseEvent) => {
-      if (searchRef.current && !searchRef.current.contains(event.target as Node)) {
-        setIsSearchFocused(false);
-      }
-    };
-    document.addEventListener("mousedown", handleClickOutside);
-    return () => document.removeEventListener("mousedown", handleClickOutside);
-  }, []);
-
   return (
     <div className="relative flex items-center flex-1 sm:flex-none mr-4 md:h-full md:py-3" ref={searchRef}>
       <SearchInput
         placeholder="Search stocks..."
-        value={searchQuery}
-        onChange={(e) => setSearchQuery(e.target.value)}
+        onSearch={setSearchQuery}
         onFocus={() => setIsSearchFocused(true)}
         className="sm:w-[320px] md:h-full"
         containerClassName="md:h-full"
       />
       
-      {/* Mock Typeahead Dropdown */}
       {isSearchFocused && searchQuery && (
-        <div className="absolute top-full left-0 mt-2 w-full sm:w-[320px] bg-surface border border-border rounded-xl shadow-lg overflow-hidden z-50">
+        <div className="absolute top-full left-0 -mt-1 w-full sm:w-[320px] bg-surface border border-border rounded-xl shadow-lg overflow-hidden z-50">
           {filteredStocks.length > 0 ? (
             <ul className="max-h-[300px] overflow-y-auto py-2">
               {filteredStocks.map((stock) => (

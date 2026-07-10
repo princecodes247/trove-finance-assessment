@@ -1,5 +1,5 @@
 import { Form, redirect, Link, useActionData, useNavigation, useSubmit } from "react-router";
-import { useState, useEffect, useRef } from "react";
+import { useState } from "react";
 import { MdOutlineVisibility, MdOutlineVisibilityOff, MdOutlineSync } from "react-icons/md";
 import { loginSchema, validateForm } from "~/../lib/schemas";
 import { apiClient } from "~/../lib/api-client";
@@ -7,6 +7,7 @@ import { Input } from "../components/ui/input";
 import { Label } from "~/components/ui/label";
 import { Button } from "~/components/ui/button";
 import { AuthCard, AuthHeader } from "~/components/ui/auth-card";
+import { useFormValidation } from "~/../lib/hooks/use-form-validation";
 
 export function meta() {
   return [
@@ -32,47 +33,16 @@ export async function action({ request }: { request: Request }) {
 export default function Login() {
   const [showPassword, setShowPassword] = useState(false);
   const actionData = useActionData<typeof action>();
-  const [localErrors, setLocalErrors] = useState<Record<string, string>>({});
-  const formRef = useRef<HTMLFormElement>(null);
-  
+  const { localErrors, handleBlur, focusFirstInvalid, formRef } = useFormValidation(loginSchema);
+
   // Merge action errors with local errors, giving priority to action errors if present (usually local handles it though)
   const errors = { ...localErrors, ...(actionData?.errors || {}) };
-  
+
   const navigation = useNavigation();
   const isSubmitting = navigation.state === "submitting";
 
   // Focus management on error
-  useEffect(() => {
-    if (actionData?.errors && Object.keys(actionData.errors).length > 0 && formRef.current) {
-      const firstInvalidInput = formRef.current.querySelector('[aria-invalid="true"]');
-      if (firstInvalidInput instanceof HTMLElement) {
-        firstInvalidInput.focus();
-      }
-    }
-  }, [actionData]);
-
-  // Progressive client-side validation
-  const validateField = (name: string, value: string) => {
-    const fieldSchema = loginSchema.shape[name as keyof typeof loginSchema.shape];
-    if (fieldSchema) {
-      const result = fieldSchema.safeParse(value);
-      if (!result.success) {
-        setLocalErrors((prev) => ({ ...prev, [name]: result.error.issues[0].message }));
-      } else {
-        setLocalErrors((prev) => {
-          const next = { ...prev };
-          delete next[name];
-          return next;
-        });
-      }
-    }
-  };
-
-  const handleBlur = (e: React.FocusEvent<HTMLInputElement>) => {
-    validateField(e.target.name, e.target.value);
-  };
-
-
+  focusFirstInvalid(actionData?.errors);
   return (
     <AuthCard>
       <AuthHeader title="Welcome back" subtitle="Sign in to your account" />

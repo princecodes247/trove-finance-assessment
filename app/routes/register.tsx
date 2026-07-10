@@ -1,5 +1,5 @@
 import { Form, redirect, Link, useActionData, useNavigation } from "react-router";
-import { useState, useEffect, useRef, useMemo } from "react";
+import { useState } from "react";
 import { MdOutlineVisibility, MdOutlineVisibilityOff, MdOutlineSync } from "react-icons/md";
 import { registerSchema, validateForm } from "~/../lib/schemas";
 import { apiClient } from "~/../lib/api-client";
@@ -7,6 +7,8 @@ import { Input } from "../components/ui/input";
 import { Label } from "~/components/ui/label";
 import { Button } from "~/components/ui/button";
 import { AuthCard, AuthHeader } from "~/components/ui/auth-card";
+import { useFormValidation } from "~/../lib/hooks/use-form-validation";
+import { usePasswordStrength } from "~/../lib/hooks/use-password-strength";
 
 export function meta() {
   return [
@@ -32,68 +34,17 @@ export default function Register() {
   const [showPassword, setShowPassword] = useState(false);
   const [password, setPassword] = useState("");
   const actionData = useActionData<typeof action>();
-  const [localErrors, setLocalErrors] = useState<Record<string, string>>({});
-  const formRef = useRef<HTMLFormElement>(null);
+  const { localErrors, setLocalErrors, handleBlur, focusFirstInvalid, formRef, validateField } = useFormValidation(registerSchema);
+  const { score: passwordStrength, label: strengthLabel, colorClass: strengthColor, criteria } = usePasswordStrength(password);
 
   const errors = { ...localErrors, ...(actionData?.errors || {}) };
-  
+
   const navigation = useNavigation();
   const isSubmitting = navigation.state === "submitting";
+  const isWeakPassword = password.length > 0 && passwordStrength <= 50;
 
   // Focus management on error
-  useEffect(() => {
-    if (actionData?.errors && Object.keys(actionData.errors).length > 0 && formRef.current) {
-      const firstInvalidInput = formRef.current.querySelector('[aria-invalid="true"]');
-      if (firstInvalidInput instanceof HTMLElement) {
-        firstInvalidInput.focus();
-      }
-    }
-  }, [actionData]);
-
-  // Progressive client-side validation
-  const validateField = (name: string, value: string) => {
-    const fieldSchema = registerSchema.shape[name as keyof typeof registerSchema.shape];
-    if (fieldSchema) {
-      const result = fieldSchema.safeParse(value);
-      if (!result.success) {
-        setLocalErrors((prev) => ({ ...prev, [name]: result.error.issues[0].message }));
-      } else {
-        setLocalErrors((prev) => {
-          const next = { ...prev };
-          delete next[name];
-          return next;
-        });
-      }
-    }
-  };
-
-  const handleBlur = (e: React.FocusEvent<HTMLInputElement>) => {
-    validateField(e.target.name, e.target.value);
-  };
-
-  const passwordStrength = useMemo(() => {
-    if (!password) return 0;
-    let score = 0;
-    if (password.length >= 8) score += 25;
-    if (/[A-Z]/.test(password)) score += 25;
-    if (/[0-9]/.test(password)) score += 25;
-    if (/[^A-Za-z0-9]/.test(password)) score += 25;
-    return score;
-  }, [password]);
-
-  const getStrengthColor = () => {
-    if (passwordStrength <= 25) return "bg-red-500";
-    if (passwordStrength <= 50) return "bg-orange-500";
-    if (passwordStrength <= 75) return "bg-yellow-500";
-    return "bg-green-500";
-  };
-  const getStrengthText = () => {
-    if (passwordStrength === 0) return "";
-    if (passwordStrength <= 25) return "Weak";
-    if (passwordStrength <= 50) return "Fair";
-    if (passwordStrength <= 75) return "Good";
-    return "Strong";
-  };
+  focusFirstInvalid(actionData?.errors);
 
   return (
     <AuthCard>
@@ -159,22 +110,30 @@ export default function Register() {
               {showPassword ? <MdOutlineVisibilityOff className="w-4 h-4" /> : <MdOutlineVisibility className="w-4 h-4" />}
             </button>
           </div>
-          {password && !errors?.password && (
-            <div className="mt-2 space-y-1.5">
-              <div className="flex justify-between items-center text-xs">
-                <span className="text-gray-500">Password strength</span>
-                <span className="font-medium text-gray-700">{getStrengthText()}</span>
+          {password && (
+            <div className="mt-3 space-y-2.5">
+              <div className="flex justify-between items-center text-xs mb-1">
+                <span className="text-gray-500 font-medium">Password strength</span>
+                <span className={`font-semibold text-[11px] ${strengthColor.replace("bg-", "text-")}`}>{strengthLabel}</span>
               </div>
               <div className="h-1.5 w-full bg-gray-100 rounded-full overflow-hidden flex gap-0.5">
                 {[25, 50, 75, 100].map((step) => (
-                  <div 
-                    key={step} 
+                  <div
+                    key={step}
                     className={`h-full flex-1 transition-colors duration-300 ${
-                      passwordStrength >= step ? getStrengthColor() : "bg-transparent"
-                    }`} 
+                      passwordStrength >= step ? strengthColor : "bg-transparent"
+                    }`}
                   />
                 ))}
               </div>
+              <ul className="space-y-1 pt-0.5">
+                {criteria.map((c) => (
+                  <li key={c.label} className={`flex items-center gap-1.5 text-[11px] transition-colors ${c.met ? "text-green-600" : "text-gray-400"}`}>
+                    <span className="shrink-0">{c.met ? "✓" : "○"}</span>
+                    {c.label}
+                  </li>
+                ))}
+              </ul>
             </div>
           )}
         </div>
@@ -182,7 +141,7 @@ export default function Register() {
         <div className="pt-2">
           <Button
             type="submit"
-            disabled={isSubmitting}
+            disabled={isSubmitting || isWeakPassword || !!errors.password || !!errors.email || !!errors.name}
             className="w-full cursor-pointer shadow-sm flex items-center justify-center gap-2"
           >
             {isSubmitting && <MdOutlineSync className="w-4 h-4 animate-spin" />}

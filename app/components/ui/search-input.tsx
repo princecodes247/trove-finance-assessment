@@ -1,13 +1,22 @@
 import * as React from "react";
 import { MdOutlineSearch } from "react-icons/md";
 import { cn } from "~/../lib/utils";
+import { useDebouncedCallback } from "~/../lib/hooks/use-debounce";
 
 export interface SearchInputProps extends React.InputHTMLAttributes<HTMLInputElement> {
   containerClassName?: string;
+  onSearch?: (value: string) => void;
+  debounceMs?: number;
 }
 
 export const SearchInput = React.forwardRef<HTMLInputElement, SearchInputProps>(
-  ({ className, containerClassName, ...props }, ref) => {
+  ({ className, containerClassName, onSearch, debounceMs = 300, onChange, ...props }, ref) => {
+    const [localValue, setLocalValue] = React.useState(props.value || "");
+    const debouncedSearch = useDebouncedCallback(
+      (value: string) => onSearch?.(value),
+      debounceMs
+    );
+
     return (
       <div className={cn("relative flex items-center w-full", containerClassName)}>
         <MdOutlineSearch className="absolute left-4 w-4 h-4 text-text-neutral z-20" />
@@ -18,6 +27,12 @@ export const SearchInput = React.forwardRef<HTMLInputElement, SearchInputProps>(
             className
           )}
           {...props}
+          value={localValue}
+          onChange={(e) => {
+            onChange?.(e);
+            setLocalValue(e.target.value);
+            debouncedSearch(e.target.value);
+          }}
         />
       </div>
     );
@@ -25,3 +40,4 @@ export const SearchInput = React.forwardRef<HTMLInputElement, SearchInputProps>(
 );
 
 SearchInput.displayName = "SearchInput";
+
