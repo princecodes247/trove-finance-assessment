@@ -99,7 +99,7 @@ export function NetWorthChart() {
         </div>
 
         <div className="flex bg-canvas rounded-full p-1 space-x-2">
-          {(["1D", "1W", "1M", "ALL"] as TimeSpan[]).map((span) => (
+          {(Object.keys(spanToDays) as TimeSpan[]).map((span) => (
             <button
               key={span}
               onClick={() => setSelectedSpan(span)}
@@ -120,7 +120,7 @@ export function NetWorthChart() {
           <div className="absolute inset-0 flex flex-col justify-end space-y-4 pb-2">
             <div className="w-full h-1/2 bg-border/50 rounded-t-xl animate-pulse" />
             <div className="flex justify-between px-2">
-              {[1, 2, 3, 4, 5].map((i) => (
+              {Array.from({ length: 5 }, (_, i) => (
                 <div key={i} className="h-2 w-8 bg-border rounded animate-pulse" />
               ))}
             </div>

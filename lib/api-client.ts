@@ -8,12 +8,12 @@ const delay = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
 
 export const apiClient = {
   login: async (credentials: any) => {
-    await delay(1000); // Simulate network latency
+    await delay(1000);
     return { success: true, user: portfolioData.user };
   },
 
   register: async (userData: any) => {
-    await delay(1000); // Simulate network latency
+    await delay(1000);
     return { success: true, user: portfolioData.user };
   },
 

@@ -23,7 +23,6 @@ export async function action({ request }: { request: Request }) {
     return { errors: validation.errors };
   }
 
-  // Use the mock api to register
   await apiClient.register(validation.data);
 
   return redirect("/dashboard");
