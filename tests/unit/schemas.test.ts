@@ -43,7 +43,7 @@ describe("registerSchema", () => {
     const result = registerSchema.safeParse({
       name: "John Doe",
       email: "john@example.com",
-      password: "securepass1",
+      password: "SecureP@ss1",
     });
     expect(result.success).toBe(true);
   });
